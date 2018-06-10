@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U-Netによる音楽と音声のミックス信号（モノラル）からの音声の分離  </title>
+<meta name="description" content="U型のネットワーク構造をもつU-Netを使って音楽のボーカル部分を分離する記事があった。 " />
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-lg px-3 my-5 markdown-body">
+<h1>U-Netによる音楽と音声のミックス信号（モノラル）からの音声の分離  </h1>
+
+<h2>概要  </h2>
+
+<p>U型のネットワーク構造をもつU-Netを使って音楽のボーカル部分を分離する記事があった。 
+そこで、音楽と相関のない音声をミックスしたモノラル信号から音声部分を抜き出す実験をしてみた。 
+バックに音楽が流れていて、そこから音声だけを抽出するような場面を想定している。<br />
+wuyiming氏が公開している <a href="https://github.com/Xiao-Ming/UNet-VocalSeparation-Chainer">UNet-VocalSeparation-Chainer</a> を
+参考にして作り直したものである。<br /></p>
+
+<p><a href="https://github.com/shun60s/Blind-Speech-Speration">github repository</a><br /></p>
+
+<h2>使い方  </h2>
+
+<h3>学習用の音楽と音声のデータを準備する    </h3>
+
+<p>学習用に  <a href="http://marsyasweb.appspot.com/download/data_sets/">GTZAN music/speech collection</a> から
+music_speech.tar.gz をダウンロードして、music_speechディレクトリーの以下のmusic_wavとspeech_wavに展開する。<br /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python3 make_dataset.py
+</code></pre></div></div>
+<p>音楽（music)と音声(speech)をミックスした信号（サンプリングレート16KHz、モノラル）を作成し、短時間フーリエ変換を計算する。<br /></p>
+
+<h3>U-Netを更に学習する  </h3>
+
+<p>U-Netのモデル初期値としてunet.modelを <a href="https://github.com/Xiao-Ming/UNet-VocalSeparation-Chainer">UNet-VocalSeparation-Chainer</a> から
+ダウンロードして使う。train.pyと同じディレクトリーに置く。<br />
+このunet.modelを使っても　おおむね分離できるが、GTZAN music/speech collectionを使って学習してみる。<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python3 train.py
+</code></pre></div></div>
+<p> 下図は学習過程の損失の変化のグラフ。学習データはすべて訓練用に利用する。テストはなし。 
+<img src="loss.png" alt="graph_loss_epoch" ><br /></p>
+
+<p>GPU(引数に -g 0）でメモリー不足エラーがでる場合、バッチサイズを小さくする（例えば引数に　-b 32　を指定する）と動くかもしれない。<br /></p>
+
+
+<h3>音楽と音声のミックス信号から音声を分離する  </h3>
+
+<p>入出ファイル（又は、ディレクトリー）とU-Netの計算に使うモデルファイルを指定する。<br /></p>
+
+<p>例１　UNet-VocalSeparation-Chainerのunet.modelを使って分離する。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python3 make_separate.py  -i mixed_input.wav -o separeted_output.wav -m unet.model
+</code></pre></div></div>
+<p>出力は、サンプリングレート16KHz、モノラルのwavファイルになる。 </p>
+
+<p>例2　学習結果のモデルファイルmodel_420を使って　ディレクトリーの中にあるwavファイルを分離する。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python3 make_separate.py  -i mixdown -o separate -m result/model_420
+</code></pre></div></div>
+<h2>感想  </h2>
+
+<p>単にイコライザーをかけて音楽成分を目立たなくした様なものもあれば、
+音楽信号の方が大きいため？分離しても音声の明瞭度がかなり落ちている部分もある。<br />
+聞き比べた結果、unet.modelを使ったほうが多少音質がまとものように感じた。<br />
+学習データとは云えかなり分離できているものもある。不思議なことである。<br /></p>
+
+<p>(mixdownとseparateディレクトリーにの中にミックスしたもと信号と分離したもののサンプルが有ります。)<br /></p>
+
+<h2>ディレクトリーの説明  </h2>
+
+<ul>
+<li>music_speech　 音楽と音声、長さ30秒のサンプルが　music_wavとspeech_wavにそれぞれ60個入れる。モノラル。</li>
+<li>mixdown　上記の音楽と音声をミックスしたもの。サンプリングレートは今回のU-Netモデルに合わせて16KHｚに変換してある。</li>
+<li>stft  上記を短時間フーリエ変換したもの。</li>
+<li>result ChainerによるU-Netの学習経過。エポック毎のmodel,snapshotとlogなど。</li>
+<li>separate ミックスした信号から　音声の分離を試みたもの。
+</li></ul>
+
+<h2>参照したもの  </h2>
+
+<ul>
+<li><a href="https://github.com/Xiao-Ming/UNet-VocalSeparation-Chainer">U-NetによるVocal SeparationのChainerの実装</a>  </li>
+<li><a href="http://marsyasweb.appspot.com/download/data_sets/">音楽と音声のデータ・セット</a>  </li>
+<li><a href="https://ismir2017.smcnus.org/wp-content/uploads/2017/10/171_Paper.pdf">Singing Voice Separation with Deep U-Net Convolutional Networks</a><br />
+</li></ul>
+
+<h2>免責事項  </h2>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.<br />
+<h4>上記はMITライセンスからの抜粋です。</h4>
+
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+/__pycache__/
+/music_speech/
+/stft/
+unet.model
+*.bat
+*.pyc
+*.md~
+*.py~
+*.*~
+*.pdf
+
+
