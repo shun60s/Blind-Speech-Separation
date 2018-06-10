@@ -8,7 +8,7 @@ U型のネットワーク構造をもつU-Netを使って音楽のボーカル�
 wuyiming氏が公開している [UNet-VocalSeparation-Chainer](https://github.com/Xiao-Ming/UNet-VocalSeparation-Chainer) を
 参考にして作り直したものである。  
 
-[github repository](https://github.com/shun60s/Blind-Speech-Speration)  
+[github repository](https://github.com/shun60s/Blind-Speech-Separation)  
 
 ## 使い方  
 

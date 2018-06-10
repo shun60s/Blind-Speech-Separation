@@ -1,6 +1,9 @@
 /__pycache__/
 /music_speech/
 /stft/
+/mixdown/
+/separate/
+/result/
 unet.model
 *.bat
 *.pyc
@@ -8,5 +11,4 @@ unet.model
 *.py~
 *.*~
 *.pdf
-
-
+*.wav
