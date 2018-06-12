@@ -58,8 +58,8 @@ python3 make_separate.py  -i mixdown -o separate -m result/model_420
 学習データとは云えかなり分離できているものもある。不思議なことである。  
 
 以下は、ミックスダウンしたものと音声を分離したサンプル。  
-- サンプル１　[ミックスダウンしたwavファイル](https://github.com/shun60s/Blind-Speech-Separation/mixdown/acomic_bagpipe.wav) と  [分離したwavファイル](https://github.com/shun60s/Blind-Speech-Separation/separate/acomic_bagpipe.wav) 
-- サンプル２　[ミックスダウンしたwavファイル](https://github.com/shun60s/Blind-Speech-Separation/mixdown/voices_winds.wav) と  [分離したwavファイル](https://github.com/shun60s/Blind-Speech-Separation/separate/voices_winds.wav)
+- サンプル１　[ミックスダウンしたwavファイル](mixdown/acomic_bagpipe.wav) と  [分離したwavファイル](separate/acomic_bagpipe.wav) 
+- サンプル２　[ミックスダウンしたwavファイル](mixdown/voices_winds.wav) と  [分離したwavファイル](separate/voices_winds.wav)
 
 ## ディレクトリーの説明  
 
