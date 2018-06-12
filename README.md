@@ -57,7 +57,9 @@ python3 make_separate.py  -i mixdown -o separate -m result/model_420
 聞き比べた結果、unet.modelを使ったほうが多少音質がまとものように感じた。  
 学習データとは云えかなり分離できているものもある。不思議なことである。  
 
-(mixdownとseparateディレクトリーにの中にミックスしたもと信号と分離したもののサンプルが有ります。)  
+以下は、ミックスダウンしたものと音声を分離したサンプル。  
+- サンプル１　[ミックスダウンしたwavファイル](https://github.com/shun60s/Blind-Speech-Separation/mixdown/acomic_bagpipe.wav) と  [分離したwavファイル](https://github.com/shun60s/Blind-Speech-Separation/separate/acomic_bagpipe.wav) 
+- サンプル２　[ミックスダウンしたwavファイル](https://github.com/shun60s/Blind-Speech-Separation/mixdown/voices_winds.wav) と  [分離したwavファイル](https://github.com/shun60s/Blind-Speech-Separation/separate/voices_winds.wav)
 
 ## ディレクトリーの説明  
 
